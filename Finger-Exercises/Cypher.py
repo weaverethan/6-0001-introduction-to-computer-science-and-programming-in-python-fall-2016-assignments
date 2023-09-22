@@ -11,15 +11,11 @@ encoder = (lambda code_keys, plain_text:''.join(['*' + code_keys[c] for c in pla
 
 encrypt = (lambda book, plain_text:encoder(gen_code_keys(book, plain_text), plain_text))
 
-#gen_code_unknown = (lambda book: {book.find(c): c for c in string.printable})
-gen_code_unknown = (lambda book: {book.index(c): c for c in book})
+gen_code_unknown = (lambda book: {book.find(c): c for c in string.printable})
+#gen_code_unknown = (lambda book: {book.index(c): c for c in book})
 
 decode = (lambda cypher, code_keys: ''.join([code_keys[int(c)] for c in cypher.split("*")]))
 
-
-
-
-print(gen_code_unknown(book))
 
 print(decode(cypher, gen_code_unknown(book)))
 #print (encrypt(book,plain_text))
