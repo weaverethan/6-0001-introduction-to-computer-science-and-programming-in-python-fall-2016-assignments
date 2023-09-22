@@ -200,8 +200,15 @@ def match_with_gaps(my_word, other_word):
         _ , and my_word and other_word are of the same length;
         False otherwise: 
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    if len(my_word) != len(other_word):
+      return False
+    else:
+      for i in range(len(my_word)):
+        if my_word[i] != "_" and my_word[i] != other_word[i]:
+          return False
+    return True
+      
+
 
 
 
@@ -215,8 +222,12 @@ def show_possible_matches(my_word):
              that has already been revealed.
 
     '''
-    # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    possible_matches = []
+    for word in wordlist:
+       if match_with_gaps(my_word, word):
+          possible_matches.append(word)
+    print(possible_matches)
+
 
 
 
@@ -264,8 +275,8 @@ if __name__ == "__main__":
     # To test part 2, comment out the pass line above and
     # uncomment the following two lines.
     
-    secret_word = choose_word(wordlist)
-    hangman(secret_word)
+    #secret_word = choose_word(wordlist)
+    #hangman(secret_word)
 
 ###############
     
@@ -274,5 +285,4 @@ if __name__ == "__main__":
     
     #secret_word = choose_word(wordlist)
     #hangman_with_hints(secret_word)
-
-
+    pass
