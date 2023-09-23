@@ -12,6 +12,9 @@
 import random
 import string
 import os
+import sys
+
+
 
 WORDLIST_FILENAME = "words.txt"
 
@@ -50,6 +53,12 @@ def choose_word(wordlist):
 # Load the list of words into the variable wordlist
 # so that it can be accessed from anywhere in the program
 wordlist = load_words()
+
+def cls():
+  if sys.platform.startswith('win'):
+    os.system('cls')
+  elif sys.platform.startswith('linux'):
+    os.system('clear')
 
 
 def is_word_guessed(secret_word, letters_guessed):
@@ -141,12 +150,11 @@ def hangman(secret_word):
     Follows the other limitations detailed in the problem write-up.
     '''
     letters_guessed = []
-    os.system('cls')
+    cls()
     num_guesses = 0
 
 
     while num_guesses < 6:
-        print(secret_word)
         print("availible letters: ", get_available_letters(letters_guessed))
         print("word:", get_guessed_word(secret_word, letters_guessed))
         print("guesses left",6-num_guesses)
@@ -156,7 +164,7 @@ def hangman(secret_word):
             break
           else:
             print("Please enter only one character and at least one.")
-        os.system('cls')
+        cls()
         if guess not in letters_guessed:
           letters_guessed.append(guess.lower())
           if guess not in  [letter for letter in secret_word]:
@@ -164,12 +172,12 @@ def hangman(secret_word):
         else:
             print("Letter already guessed!")
         if is_word_guessed(secret_word, letters_guessed) == True:
-            os.system('cls')
+            cls()
             print("YOU WIN!!")
             print(secret_word)
             break
     if num_guesses >= 6:
-        os.system('cls')
+        cls()
         print("YOU LOSE!!")
         print(secret_word)
             
@@ -259,7 +267,40 @@ def hangman_with_hints(secret_word):
     Follows the other limitations detailed in the problem write-up.
     '''
     # FILL IN YOUR CODE HERE AND DELETE "pass"
-    pass
+    letters_guessed = []
+    cls()
+    num_guesses = 0
+
+
+    while num_guesses < 6:
+        print("availible letters: ", get_available_letters(letters_guessed))
+        print("word:", get_guessed_word(secret_word, letters_guessed))
+        print("guesses left",6-num_guesses)
+        while True:
+          guess = input("select a letter:")
+          if len(guess) == 1:
+            break
+          else:
+            print("Please enter only one character and at least one.")
+        cls()
+        if guess not in letters_guessed and guess != "*":
+          letters_guessed.append(guess.lower())
+          if guess not in  [letter for letter in secret_word]:
+            num_guesses += 1
+        elif guess == "*":
+           show_possible_matches(get_guessed_word(secret_word, letters_guessed))
+           print("")
+        else:
+            print("Letter already guessed!")
+        if is_word_guessed(secret_word, letters_guessed) == True:
+            cls()
+            print("YOU WIN!!")
+            print(secret_word)
+            break
+    if num_guesses >= 6:
+        cls()
+        print("YOU LOSE!!")
+        print(secret_word)
 
 
 
@@ -283,6 +324,6 @@ if __name__ == "__main__":
     # To test part 3 re-comment out the above lines and 
     # uncomment the following two lines. 
     
-    #secret_word = choose_word(wordlist)
-    #hangman_with_hints(secret_word)
-    pass
+    secret_word = choose_word(wordlist)
+    hangman_with_hints(secret_word)
+    

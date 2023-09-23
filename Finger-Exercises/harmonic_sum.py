@@ -5,4 +5,4 @@ def H_sum(n):
         return (1/n)+H_sum(n-1)
     
 
-print(H_sum(987))
+print(H_sum(33))
