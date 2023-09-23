@@ -26,5 +26,5 @@ def shopping_days(year):
     return days_difference
 
     
-year = 2023
+year = 1947
 print(f"The number of shopping days is {shopping_days(year)} in {year}")
