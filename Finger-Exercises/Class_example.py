@@ -26,19 +26,24 @@ class Int_set(object):
                 for e in self._vals:
                     result = result + str(e) + ','
                 return f'{{{result[:-1]}}}'
-        def union(self, other):
+         
+
+        def __add__(self, other):
             """other is an Int_set mutates self so that 
             it contains exactly the elemnts in 
             self plus the elements in other."""
-            for i in other.get_member():
-                  if i not in self._vals:
-                        self._vals.append(i)
-            
+            sum = Int_set()
+            for i in other.get_member() + self._vals:
+                sum.insert(i)
+            return sum
+
+
 
 
 
 x = Int_set()
 y = Int_set()
+z = Int_set()
 
 x.insert(1)
 x.insert(3)
@@ -47,9 +52,13 @@ y.insert(1)
 y.insert(9)
 y.insert(3)
 y.insert(4)
-
-x.union(y)
+z.insert(11)
 
 
 
 print(x)
+print(y)
+print(z+x+y)
+print(x)
+print(y)
+
