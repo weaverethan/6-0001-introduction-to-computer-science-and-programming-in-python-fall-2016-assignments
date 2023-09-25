@@ -201,7 +201,21 @@ def is_valid_word(word, hand, word_list):
     returns: boolean
     """
 
+    if word.lower() not in word_list: return False
+    word_dic = {}
+    for letter in word.lower():
+        word_dic[letter] = word_dic.get(letter, 0) + 1
+    for letter, ammount in word_dic.items():
+        if hand.get(letter, 0) < ammount:
+            return False 
+    return True
+
     pass  # TO DO... Remove this line when you implement this function
+
+word = "our"
+hand = {'o':1,'u':0,'r':1,'a':1}
+print(is_valid_word(word, hand, load_words()))
+
 
 #
 # Problem #5: Playing a hand
