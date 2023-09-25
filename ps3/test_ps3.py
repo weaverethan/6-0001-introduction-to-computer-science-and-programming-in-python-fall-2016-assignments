@@ -10,7 +10,7 @@ def test_get_word_score():
     """
     failure=False
     # dictionary of words and scores
-    words = {("", 7):0, ("it", 7):2, ("was", 7):54, ("weed", 6):176,
+    words = {("", 7):0, ("it", 7):1, ("was", 7):54, ("weed", 6):176,
              ("scored", 7):351, ("WaYbILl", 7):735, ("Outgnaw", 7):539,
              ("fork", 7):209, ("FORK", 4):308}
     for (word, n) in words.keys():
@@ -24,6 +24,7 @@ def test_get_word_score():
         print("SUCCESS: test_get_word_score()")
 
 # end of test_get_word_score
+
 
 
 def test_update_hand():

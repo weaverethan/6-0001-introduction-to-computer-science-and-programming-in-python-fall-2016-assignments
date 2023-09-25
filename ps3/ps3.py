@@ -92,7 +92,18 @@ def get_word_score(word, n):
     returns: int >= 0
     """
     
-    pass  # TO DO... Remove this line when you implement this function
+    word_value = sum(SCRABBLE_LETTER_VALUES[letter.lower()] for letter in word)
+    
+    score = (7 * len(word) - 3 * (n - len(word))) * word_value
+    
+    if len(word) == 0:
+        return 0
+
+    return max(score, 1)
+
+
+
+
 
 #
 # Make sure you understand how this function works and what it does!
@@ -340,6 +351,6 @@ def play_game(word_list):
 # Do not remove the "if __name__ == '__main__':" line - this code is executed
 # when the program is run directly, instead of through an import statement
 #
-if __name__ == '__main__':
-    word_list = load_words()
-    play_game(word_list)
+#if __name__ == '__main__':
+#    word_list = load_words()
+#    play_game(word_list)
