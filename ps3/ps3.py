@@ -183,8 +183,9 @@ def update_hand(hand, word):
     """
     new_hand = hand.copy()
     for letter in word.lower():
-        if int(new_hand.get(letter)) >= 0:
-            new_hand[letter] -= 1
+        if int(new_hand.get(letter, 0)) >= 0:
+            if letter in new_hand:
+                new_hand[letter] -= 1
 
     return new_hand
 
@@ -318,10 +319,10 @@ def play_hand(hand, word_list):
         else:
             print("WORD NOT VALID")
         hand = update_hand(hand, input_word)
-    print("Total Score: "+ str(total_score))
+    print("Hand Score: "+ str(total_score))
     return total_score
 
-play_hand(deal_hand(7),load_words())
+
 
 #
 # Problem #6: Playing a game
@@ -354,8 +355,21 @@ def substitute_hand(hand, letter):
     letter: string
     returns: dictionary (string -> int)
     """
-    
-    pass  # TO DO... Remove this line when you implement this function
+    if letter in hand.keys():
+
+        x = random.choice(VOWELS + CONSONANTS)
+        while x in hand.keys():
+                x = random.choice(VOWELS + CONSONANTS)
+
+        if hand[letter] > 1:
+            hand[letter] -= 1
+        else:
+            del hand[letter]
+        
+        hand[x] = hand.get(x, 0) + 1
+        return hand
+        
+
        
     
 def play_game(word_list):
@@ -387,9 +401,71 @@ def play_game(word_list):
     * Returns the total score for the series of hands
 
     word_list: list of lowercase strings
+
     """
+
+    substitute = 1
+    Totalscore = 0
+    replay = 0
+
+    while True:
+        num_hands = input("Enter Number of Hands:")
+        try:
+            num_hands = int(num_hands)
+            break
+        except:
+            print('Not a Number!')
+        
+    hand = deal_hand(HAND_SIZE)
+    while num_hands > 0:
+        print("GAME SCORE:" + str(Totalscore))
+        print('you have '+str(num_hands)+' hands left')
+        while substitute > 0 and replay != 1:
+            display_hand(hand)
+            print("Do You Want to Sub a Letter?")
+            substitute_current = input("YES OR NO:")
+            if substitute_current.lower() == "yes":
+                while True:
+                    letter = input("Please enter one letter: ")
+                    if len(letter) == 1 and letter.isalpha():
+                        substitute_hand(hand, letter)
+                        break  # Exit the loop if the input is one letter
+                    else:
+                        print("Please enter exactly one letter.")
+                print("your new hand is")
+                substitute -= 1
+                break        
+            elif substitute_current.lower() == "no":
+                break
+            print("INVALID INPUT!")
+        while True:
+            hand_score = play_hand(hand, word_list)
+            while replay == 0:
+                print('would you like to replay hand?')
+                replay = str(input("YES or NO:"))
+                if replay.lower() == "yes":
+                    replay = 1
+                    break
+                elif replay.lower() == "no":
+                    break
+                else:
+                    print("INVALID INPUT!")
+            if replay == 1:
+                hand_score_replay = play_hand(hand, word_list)
+                if hand_score > hand_score_replay:
+                    Totalscore += hand_score
+                else:
+                    Totalscore += hand_score_replay
+                replay = 2
+            else:
+                Totalscore += hand_score
+            hand = deal_hand(HAND_SIZE)
+            break
+        num_hands -= 1
+    print("GAME SCORE:" + str(Totalscore))
+
+
     
-    print("play_game not implemented.") # TO DO... Remove this line when you implement this function
     
 
 
