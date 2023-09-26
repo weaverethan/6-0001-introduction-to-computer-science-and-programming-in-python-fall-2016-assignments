@@ -124,7 +124,7 @@ def display_hand(hand):
     for letter in hand.keys():
         for j in range(hand[letter]):
              print(letter, end=' ')      # print all on the same line
-    print()                              # print an empty line
+    print("")                              # print an empty line
 
 #
 # Make sure you understand how this function works and what it does!
@@ -145,6 +145,7 @@ def deal_hand(n):
     """
     
     hand={}
+    hand["*"] = 1
     num_vowels = int(math.ceil(n / 3))
 
     for i in range(num_vowels-1):
@@ -155,7 +156,7 @@ def deal_hand(n):
         x = random.choice(CONSONANTS)
         hand[x] = hand.get(x, 0) + 1
 
-    hand[x] = hand.get('*', 0) + 1
+    
     
     return hand
 
@@ -188,6 +189,7 @@ def update_hand(hand, word):
     return new_hand
 
 
+
 #
 # Problem #3: Test word validity
 #
@@ -203,21 +205,20 @@ def is_valid_word(word, hand, word_list):
     returns: boolean
     """
     def match_with_asterisk(my_word, other_word):
-
         if len(my_word) != len(other_word):
             return False
-        else:
-            for i in range(len(my_word)):
-                if my_word[i] != other_word[i] and my_word[i] != "*" or other_word[i] not in [letter for letter in CONSONANTS]:
-                    return False
+    
+        for my_letter, other_letter in zip(my_word.lower(), other_word.lower()):
+            if not (my_letter == other_letter or (my_letter == "*" and other_letter in VOWELS)):
+                return False
+    
         return True
-    
-    
+
+
     possible_matches = []
     for word_possible in word_list:
        if match_with_asterisk(word.lower(), word_possible):
           possible_matches.append(word_possible)
-    
     if len(possible_matches) == 0: return False
 
     hand_copy = hand.copy()
@@ -228,10 +229,6 @@ def is_valid_word(word, hand, word_list):
         else: return False
     return True
 
-word = 'Raptur*'
-hand = {"r":2,"a":3,'p':2,'e':0,'t':1,'u':1,'*':1}
-
-print(is_valid_word(word, hand, load_words()))
 
 #
 # Problem #5: Playing a hand
@@ -243,8 +240,8 @@ def calculate_handlen(hand):
     hand: dictionary (string-> int)
     returns: integer
     """
+    return sum(hand.values())
     
-    pass  # TO DO... Remove this line when you implement this function
 
 def play_hand(hand, word_list):
 
@@ -309,7 +306,22 @@ def play_hand(hand, word_list):
 
     # Return the total score as result of function
 
+    total_score = 0
+    while calculate_handlen(hand) > 0:
+        display_hand(hand)
+        input_word = str(input("Enter Word or !! to exit:" ))
+        if input_word == "!!":
+            break
+        elif is_valid_word(input_word, hand, word_list):
+            print("Word Score: "+ str(get_word_score(input_word,calculate_handlen(hand))))
+            total_score += get_word_score(input_word,calculate_handlen(hand))
+        else:
+            print("WORD NOT VALID")
+        hand = update_hand(hand, input_word)
+    print("Total Score: "+ str(total_score))
+    return total_score
 
+play_hand(deal_hand(7),load_words())
 
 #
 # Problem #6: Playing a game
@@ -386,6 +398,6 @@ def play_game(word_list):
 # Do not remove the "if __name__ == '__main__':" line - this code is executed
 # when the program is run directly, instead of through an import statement
 #
-#if __name__ == '__main__':
-#    word_list = load_words()
-#    play_game(word_list)
+if __name__ == '__main__':
+    word_list = load_words()
+    play_game(word_list)
