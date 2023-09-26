@@ -16,7 +16,7 @@ CONSONANTS = 'bcdfghjklmnpqrstvwxyz'
 HAND_SIZE = 7
 
 SCRABBLE_LETTER_VALUES = {
-    'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1, 'f': 4, 'g': 2, 'h': 4, 'i': 1, 'j': 8, 'k': 5, 'l': 1, 'm': 3, 'n': 1, 'o': 1, 'p': 3, 'q': 10, 'r': 1, 's': 1, 't': 1, 'u': 1, 'v': 4, 'w': 4, 'x': 8, 'y': 4, 'z': 10
+    '*':0,'a': 1, 'b': 3, 'c': 3, 'd': 2, 'e': 1, 'f': 4, 'g': 2, 'h': 4, 'i': 1, 'j': 8, 'k': 5, 'l': 1, 'm': 3, 'n': 1, 'o': 1, 'p': 3, 'q': 10, 'r': 1, 's': 1, 't': 1, 'u': 1, 'v': 4, 'w': 4, 'x': 8, 'y': 4, 'z': 10
 }
 
 # -----------------------------------
@@ -147,13 +147,15 @@ def deal_hand(n):
     hand={}
     num_vowels = int(math.ceil(n / 3))
 
-    for i in range(num_vowels):
+    for i in range(num_vowels-1):
         x = random.choice(VOWELS)
         hand[x] = hand.get(x, 0) + 1
     
     for i in range(num_vowels, n):    
         x = random.choice(CONSONANTS)
         hand[x] = hand.get(x, 0) + 1
+
+    hand[x] = hand.get('*', 0) + 1
     
     return hand
 
@@ -200,22 +202,36 @@ def is_valid_word(word, hand, word_list):
     word_list: list of lowercase strings
     returns: boolean
     """
+    def match_with_asterisk(my_word, other_word):
 
-    if word.lower() not in word_list: return False
-    word_dic = {}
+        if len(my_word) != len(other_word):
+            return False
+        else:
+            for i in range(len(my_word)):
+                if my_word[i] != other_word[i] and my_word[i] != "*" or other_word[i] not in [letter for letter in CONSONANTS]:
+                    return False
+        return True
+    
+    
+    possible_matches = []
+    for word_possible in word_list:
+       if match_with_asterisk(word.lower(), word_possible):
+          possible_matches.append(word_possible)
+    
+    if len(possible_matches) == 0: return False
+
+    hand_copy = hand.copy()
+
     for letter in word.lower():
-        word_dic[letter] = word_dic.get(letter, 0) + 1
-    for letter, ammount in word_dic.items():
-        if hand.get(letter, 0) < ammount:
-            return False 
+        if hand_copy.get(letter, 0) > 0:
+            hand_copy[letter] -= 1
+        else: return False
     return True
 
-    pass  # TO DO... Remove this line when you implement this function
+word = 'Raptur*'
+hand = {"r":2,"a":3,'p':2,'e':0,'t':1,'u':1,'*':1}
 
-word = "our"
-hand = {'o':1,'u':0,'r':1,'a':1}
 print(is_valid_word(word, hand, load_words()))
-
 
 #
 # Problem #5: Playing a hand
