@@ -4,6 +4,7 @@
 # Time Spent: x:xx
 
 import string
+import re
 
 ### HELPER CODE ###
 def load_words(file_name="words.txt"):
@@ -104,6 +105,7 @@ class Message(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
+        self.shift = shift
         lower = string.ascii_lowercase
         upper = string.ascii_uppercase
         self.shift_lower_dict = {}
@@ -121,7 +123,7 @@ class Message(object):
 
         
 
-    def apply_shift(self, shift):
+    def apply_shift(self):
         '''
         Applies the Caesar Cipher to self.message_text with the input shift.
         Creates a new string that is self.message_text shifted down the
@@ -133,7 +135,18 @@ class Message(object):
         Returns: the message text (string) in which every character is shifted
              down the alphabet by the input shift
         '''
-        pass #delete this line and replace with your code here
+        #_shiftdictionary = self.build_shift_dict(shift)
+
+        self.message_cipher = ""
+        for letter in self.message_text:
+            if letter in self.shift_dict:
+                self.message_cipher += self.shift_dict[letter]
+            else:
+                self.message_cipher += letter
+        
+        return self.message_cipher
+
+        
 
 
 
@@ -154,7 +167,11 @@ class PlaintextMessage(Message):
             self.message_text_encrypted (string, created using shift)
 
         '''
-        pass #delete this line and replace with your code here
+        super().__init__(text)
+        self.shift = shift
+        self.encryption_dict = self.build_shift_dict(shift)
+        self.message_text_encrypted = self.apply_shift()
+    
 
     def get_shift(self):
         '''
@@ -162,7 +179,7 @@ class PlaintextMessage(Message):
         
         Returns: self.shift
         '''
-        pass #delete this line and replace with your code here
+        return self.shift
 
     def get_encryption_dict(self):
         '''
@@ -170,7 +187,7 @@ class PlaintextMessage(Message):
         
         Returns: a COPY of self.encryption_dict
         '''
-        pass #delete this line and replace with your code here
+        return self.encryption_dict
 
     def get_message_text_encrypted(self):
         '''
@@ -178,7 +195,7 @@ class PlaintextMessage(Message):
         
         Returns: self.message_text_encrypted
         '''
-        pass #delete this line and replace with your code here
+        return self.message_text_encrypted
 
     def change_shift(self, shift):
         '''
@@ -190,8 +207,9 @@ class PlaintextMessage(Message):
 
         Returns: nothing
         '''
-        pass #delete this line and replace with your code here
-
+        self.shift = shift
+        self.build_shift_dict(self.shift)
+        self.apply_shift()
 
 class CiphertextMessage(Message):
     def __init__(self, text):
@@ -204,7 +222,10 @@ class CiphertextMessage(Message):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        super().__init__(text)
+        self.message_text = text
+        #self.valid_words = load_words("words.txt")
+
 
     def decrypt_message(self):
         '''
@@ -222,7 +243,30 @@ class CiphertextMessage(Message):
         Returns: a tuple of the best shift value used to decrypt the message
         and the decrypted message text using that shift value
         '''
-        pass #delete this line and replace with your code here
+
+        attempts_dic = {}
+        for shift in range(1,26):
+            self.build_shift_dict(shift)
+            attempts_dic[shift] = self.apply_shift()
+
+        attempts_cleaned= {}
+        for attempt_shift, attempt in attempts_dic.items():
+            cleaned_string = ((re.sub(r'[^\w\s]', '', attempt)).lower()).split()
+            attempts_cleaned[attempt_shift] = cleaned_string
+
+        best_shift = {}
+        for attempt_shift, attempt  in attempts_cleaned.items():
+            for word in attempt:
+                if word in self.valid_words:
+                    best_shift[attempt_shift] = best_shift.get(attempt_shift, 0) + 1
+
+        best_key = max(best_shift, key=best_shift.get)
+
+        Message = attempts_dic[best_key]
+
+        return (26-best_key, Message)
+            
+
 
 if __name__ == '__main__':
 
@@ -240,5 +284,7 @@ if __name__ == '__main__':
 
     #TODO: best shift value and unencrypted story 
     
-    test = Message("test")
-    print(test.build_shift_dict(5))
+    test = PlaintextMessage("",3)
+    teast = CiphertextMessage("Amkczqbg Xzwbwkwt Jzwsmv!")
+    print(test.get_message_text_encrypted())
+    print(teast.decrypt_message())
