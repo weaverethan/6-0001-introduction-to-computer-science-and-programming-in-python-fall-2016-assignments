@@ -6,7 +6,7 @@
 import string
 
 ### HELPER CODE ###
-def load_words(file_name):
+def load_words(file_name="words.txt"):
     '''
     file_name (string): the name of the file containing 
     the list of words to load    
@@ -70,7 +70,8 @@ class Message(object):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        self.valid_words = load_words("words.txt")
+        self.message_text = text
 
     def get_message_text(self):
         '''
@@ -78,7 +79,7 @@ class Message(object):
         
         Returns: self.message_text
         '''
-        pass #delete this line and replace with your code here
+        return self.message_text
 
     def get_valid_words(self):
         '''
@@ -87,7 +88,7 @@ class Message(object):
         
         Returns: a COPY of self.valid_words
         '''
-        pass #delete this line and replace with your code here
+        return self.valid_words.copy()
 
     def build_shift_dict(self, shift):
         '''
@@ -103,7 +104,22 @@ class Message(object):
         Returns: a dictionary mapping a letter (string) to 
                  another letter (string). 
         '''
-        pass #delete this line and replace with your code here
+        lower = string.ascii_lowercase
+        upper = string.ascii_uppercase
+        self.shift_lower_dict = {}
+        self.shift_upper_dict = {}
+        shift = shift%26
+        self.lower_shift = lower[shift:]+lower[:shift]
+        self.upper_shift = upper[shift:]+upper[:shift]
+        for self.shiftletter, self.letter in zip(self.lower_shift, lower):
+            self.shift_lower_dict[self.letter] = self.shiftletter
+        for self.shiftletter, self.letter in zip(self.upper_shift, upper):
+            self.shift_upper_dict[self.letter] = self.shiftletter
+
+        self.shift_dict = {**self.shift_lower_dict, **self.shift_upper_dict}
+        return self.shift_dict
+
+        
 
     def apply_shift(self, shift):
         '''
@@ -118,6 +134,9 @@ class Message(object):
              down the alphabet by the input shift
         '''
         pass #delete this line and replace with your code here
+
+
+
 
 class PlaintextMessage(Message):
     def __init__(self, text, shift):
@@ -221,4 +240,5 @@ if __name__ == '__main__':
 
     #TODO: best shift value and unencrypted story 
     
-    pass #delete this line and replace with your code here
+    test = Message("test")
+    print(test.build_shift_dict(5))
