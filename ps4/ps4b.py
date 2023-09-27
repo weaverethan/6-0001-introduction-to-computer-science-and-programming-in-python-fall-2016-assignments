@@ -284,7 +284,7 @@ if __name__ == '__main__':
 
     #TODO: best shift value and unencrypted story 
     
-    test = PlaintextMessage("",3)
-    teast = CiphertextMessage("Amkczqbg Xzwbwkwt Jzwsmv!")
+    test = PlaintextMessage("",8)
+    teast = CiphertextMessage("mdfn dqg mloo udq grzq wkh kloo")
     print(test.get_message_text_encrypted())
     print(teast.decrypt_message())
