@@ -4,6 +4,7 @@
 # Time Spent: x:xx
 
 import string
+import random
 from ps4a import get_permutations
 
 ### HELPER CODE ###
@@ -70,7 +71,8 @@ class SubMessage(object):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        self.message_text = text
+        self.valid_words = load_words("words.txt")
     
     def get_message_text(self):
         '''
@@ -78,7 +80,7 @@ class SubMessage(object):
         
         Returns: self.message_text
         '''
-        pass #delete this line and replace with your code here
+        return self.message_text
 
     def get_valid_words(self):
         '''
@@ -87,7 +89,7 @@ class SubMessage(object):
         
         Returns: a COPY of self.valid_words
         '''
-        pass #delete this line and replace with your code here
+        return self.valid_words.copy()
                 
     def build_transpose_dict(self, vowels_permutation):
         '''
@@ -109,7 +111,33 @@ class SubMessage(object):
                  another letter (string). 
         '''
         
-        pass #delete this line and replace with your code here
+        #self.lower_dic = {letter: '' for letter in string.ascii_lowercase}
+        #self.upper_dic = {letter: '' for letter in string.ascii_uppercase}
+        #temp_lower = [letter for letter in string.ascii_lowercase]
+        #temp_upper = [letter for letter in string.ascii_uppercase]
+        #
+
+        #for letter in self.lower_dic.keys():
+        #    random_char = random.choice(temp_lower)
+        #    self.lower_dic[letter] = random_char
+        #    temp_lower.remove(random_char)
+        #
+        #for letter in self.upper_dic.keys():
+        #    random_char = random.choice(temp_upper)
+        #    self.upper_dic[letter] = random_char
+        #    temp_upper.remove(random_char)
+
+        #scramble_dic = {**self.upper_dic, **self.lower_dic}
+
+        vowels_permutation = vowels_permutation.lower()+vowels_permutation.upper()#
+        scramble_dic = {}    
+        for vowel, permutation in zip('aeiouAEIOU',vowels_permutation):
+            scramble_dic[vowel] = permutation
+
+
+        return scramble_dic
+
+        
     
     def apply_transpose(self, transpose_dict):
         '''
@@ -118,8 +146,16 @@ class SubMessage(object):
         Returns: an encrypted version of the message text, based 
         on the dictionary
         '''
+        list_message = list(self.message_text)
+
         
-        pass #delete this line and replace with your code here
+        for letter in list_message:
+            if letter in transpose_dict.keys():
+                list_message[list_message.index(letter)] = transpose_dict[letter]
+
+        self.encrypted_message = ''.join(list_message)
+
+        return self.encrypted_message
         
 class EncryptedSubMessage(SubMessage):
     def __init__(self, text):
@@ -158,13 +194,16 @@ class EncryptedSubMessage(SubMessage):
 if __name__ == '__main__':
 
     # Example test case
-    message = SubMessage("Hello World!")
-    permutation = "eaiuo"
-    enc_dict = message.build_transpose_dict(permutation)
-    print("Original message:", message.get_message_text(), "Permutation:", permutation)
-    print("Expected encryption:", "Hallu Wurld!")
-    print("Actual encryption:", message.apply_transpose(enc_dict))
-    enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
-    print("Decrypted message:", enc_message.decrypt_message())
+    #message = SubMessage("Hello World!")
+    #permutation = "eaiuo"
+    #enc_dict = message.build_transpose_dict(permutation)
+    #print("Original message:", message.get_message_text(), "Permutation:", permutation)
+    #print("Expected encryption:", "Hallu Wurld!")
+    #print("Actual encryption:", message.apply_transpose(enc_dict))
+    #enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
+    #print("Decrypted message:", enc_message.decrypt_message())
+    message = SubMessage("HEllo World!")
+    print(message.apply_transpose(message.build_transpose_dict("iAueo")))
+    
      
     #TODO: WRITE YOUR TEST CASES HERE
