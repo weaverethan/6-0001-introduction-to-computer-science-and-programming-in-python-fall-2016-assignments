@@ -5,6 +5,7 @@
 
 import string
 import random
+import re
 from ps4a import get_permutations
 
 ### HELPER CODE ###
@@ -129,7 +130,7 @@ class SubMessage(object):
 
         #scramble_dic = {**self.upper_dic, **self.lower_dic}
 
-        vowels_permutation = vowels_permutation.lower()+vowels_permutation.upper()#
+        vowels_permutation = vowels_permutation.lower()+vowels_permutation.upper()
         scramble_dic = {}    
         for vowel, permutation in zip('aeiouAEIOU',vowels_permutation):
             scramble_dic[vowel] = permutation
@@ -149,9 +150,9 @@ class SubMessage(object):
         list_message = list(self.message_text)
 
         
-        for letter in list_message:
+        for index, letter in enumerate(list_message):
             if letter in transpose_dict.keys():
-                list_message[list_message.index(letter)] = transpose_dict[letter]
+                list_message[index] = transpose_dict[letter]
 
         self.encrypted_message = ''.join(list_message)
 
@@ -168,7 +169,8 @@ class EncryptedSubMessage(SubMessage):
             self.message_text (string, determined by input text)
             self.valid_words (list, determined using helper function load_words)
         '''
-        pass #delete this line and replace with your code here
+        super().__init__(text)
+        
 
     def decrypt_message(self):
         '''
@@ -188,8 +190,34 @@ class EncryptedSubMessage(SubMessage):
         
         Hint: use your function from Part 4A
         '''
-        pass #delete this line and replace with your code here
+
+
+        permutations = get_permutations("aeiou")
+        list_of_keys = []
     
+        for permutation in permutations:
+            dic = {}
+            for basic_vowel, permutation_vowel in zip('aeiou',permutation):
+                dic[basic_vowel] = permutation_vowel
+            list_of_keys.append(dic)
+
+        words_in_attempt = {}
+
+        for dic_number, dictionary in enumerate(list_of_keys):
+            message_list = [letter.lower() for letter in self.message_text]
+            for index, letter in enumerate(message_list):
+                if letter in dictionary:
+                    message_list[index] = dictionary[letter]
+            message = ((re.sub(r'[^\w\s]', '', (''.join(message_list))))).split()
+            for word in message:
+                if word in self.valid_words:
+                    words_in_attempt[dic_number] = words_in_attempt.get(dic_number, 0) + 1
+                    
+        
+        print(max(words_in_attempt, key=words_in_attempt.get))
+        
+        return (words_in_attempt)
+            
 
 if __name__ == '__main__':
 
@@ -202,8 +230,9 @@ if __name__ == '__main__':
     #print("Actual encryption:", message.apply_transpose(enc_dict))
     #enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
     #print("Decrypted message:", enc_message.decrypt_message())
-    message = SubMessage("HEllo World!")
-    print(message.apply_transpose(message.build_transpose_dict("iAueo")))
-    
+    message = EncryptedSubMessage("HAlle Werld whit us yeor nima?")
+    test = SubMessage('HEllo World what is your name?')
+    print(test.apply_transpose(test.build_transpose_dict("iaueo")))
+    print(message.decrypt_message())
      
     #TODO: WRITE YOUR TEST CASES HERE
