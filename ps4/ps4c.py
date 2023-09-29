@@ -192,12 +192,12 @@ class EncryptedSubMessage(SubMessage):
         '''
 
 
-        permutations = get_permutations("aeiou")
+        standard_vowels = "aeiouh"
         list_of_keys = []
     
-        for permutation in permutations:
+        for permutation in get_permutations(standard_vowels):
             dic = {}
-            for basic_vowel, permutation_vowel in zip('aeiou',permutation):
+            for basic_vowel, permutation_vowel in zip(standard_vowels,permutation):
                 dic[basic_vowel] = permutation_vowel
             list_of_keys.append(dic)
 
@@ -214,9 +214,9 @@ class EncryptedSubMessage(SubMessage):
                     words_in_attempt[dic_number] = words_in_attempt.get(dic_number, 0) + 1
                     
         
-        print(max(words_in_attempt, key=words_in_attempt.get))
         
-        return (words_in_attempt)
+        
+        return (list_of_keys[max(words_in_attempt, key=words_in_attempt.get)])
             
 
 if __name__ == '__main__':
