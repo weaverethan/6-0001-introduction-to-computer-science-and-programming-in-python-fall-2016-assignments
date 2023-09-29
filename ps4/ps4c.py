@@ -192,7 +192,7 @@ class EncryptedSubMessage(SubMessage):
         '''
 
 
-        standard_vowels = "aeiouh"
+        standard_vowels = "aeiou"
         list_of_keys = []
     
         for permutation in get_permutations(standard_vowels):
