@@ -199,29 +199,41 @@ class EncryptedSubMessage(SubMessage):
             dic = {}
             for basic_vowel, permutation_vowel in zip(standard_vowels,permutation):
                 dic[basic_vowel] = permutation_vowel
+                dic[basic_vowel.upper()] = permutation_vowel.upper()
             list_of_keys.append(dic)
-
+    
         words_in_attempt = {}
 
         for dic_number, dictionary in enumerate(list_of_keys):
-            message_list = [letter.lower() for letter in self.message_text]
+            message_list = [letter for letter in self.message_text]
             for index, letter in enumerate(message_list):
                 if letter in dictionary:
                     message_list[index] = dictionary[letter]
-            message = ((re.sub(r'[^\w\s]', '', (''.join(message_list))))).split()
+            message = ((re.sub(r'[^\w\s]', '', (''.join(message_list).lower())))).split()
             for word in message:
                 if word in self.valid_words:
                     words_in_attempt[dic_number] = words_in_attempt.get(dic_number, 0) + 1
 
         if all(value == 0 for value in words_in_attempt.values()):
             return self.message_text
-    
+
+
         max_value = max(words_in_attempt.values())
         keys_with_max_value = [key for key, value in words_in_attempt.items() if value == max_value]
 
         
-        #return (list_of_keys[max(words_in_attempt, key=words_in_attempt.get)])
-        return keys_with_max_value    
+        list_of_messages = []
+
+        for index in keys_with_max_value:
+            decryption = []
+            for letter in self.message_text:
+                if letter in list_of_keys[index]:
+                    decryption.append(list_of_keys[index][letter])
+                else:
+                    decryption.append(letter)
+            list_of_messages.append(''.join(decryption))
+
+        return list_of_messages 
 
 if __name__ == '__main__':
 
@@ -234,9 +246,9 @@ if __name__ == '__main__':
     #print("Actual encryption:", message.apply_transpose(enc_dict))
     #enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
     #print("Decrypted message:", enc_message.decrypt_message())
-    message = EncryptedSubMessage("HAlle Werld ?")
-    test = SubMessage('HEllo World what is your name?')
-    print(test.apply_transpose(test.build_transpose_dict("iaueo")))
+    message = EncryptedSubMessage("Jick Fleray us i mythucil chirictar craitad en tha spor ef i memant te halp cevar in unsoffucuantly plinnad hick. Ha his baan ragustarad fer clissas it MUT twuca bafera, bot his rapertadly navar pissad i cliss. Ut his baan tha tridutuen ef tha rasudants ef Aist Cimpos te bacema Jick Fleray fer i faw nughts aich yair te adocita uncemung stodants un tha wiys, mains, ind athucs ef hickung.")
+    #test = SubMessage('Jack Florey is a mythical character created on the spur of a moment to help cover an insufficiently planned hack. He has been registered for classes at MIT twice before, but has reportedly never passed a class. It has been the tradition of the residents of East Campus to become Jack Florey for a few nights each year to educate incoming students in the ways, means, and ethics of hacking.')
+    #print(test.apply_transpose(test.build_transpose_dict("iaueo")))
     print(message.decrypt_message())
      
     #TODO: WRITE YOUR TEST CASES HERE
