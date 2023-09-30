@@ -25,6 +25,6 @@ def merge_sort(L, compare = lambda x, y:x<y):
         right = merge_sort(L[middle:], compare)
         return merge(left, right, compare)
     
-tuple_list = [(2,5),(4,1),(54,3),(94,2),(2,9)]
+tuple_list = [(2,5),(6,1),(54,3),(94,2),(2,9)]
 
 print(merge_sort(tuple_list))
