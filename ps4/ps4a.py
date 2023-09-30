@@ -22,8 +22,8 @@ def get_permutations(sequence):
     Note: depending on your implementation, you may return the permutations in
     a different order than what is listed here.
     '''
-    if sequence == "":
-        return [""]
+    if len(sequence) == 1:
+        return [sequence]
 
     permutations = []
     
@@ -46,7 +46,7 @@ if __name__ == '__main__':
 #    to be three characters or fewer as you will have n! permutations for a 
 #    sequence of length n)
 
-    input = 'aeiou'
+    input = 'abcdefg'
     print('Input:', input)
     print('Expected Output:', ['abc', 'acb', 'bac', 'bca', 'cab', 'cba'])
     print('Actual Output:', get_permutations(input))

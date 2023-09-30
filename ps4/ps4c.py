@@ -212,12 +212,16 @@ class EncryptedSubMessage(SubMessage):
             for word in message:
                 if word in self.valid_words:
                     words_in_attempt[dic_number] = words_in_attempt.get(dic_number, 0) + 1
-                    
+
+        if all(value == 0 for value in words_in_attempt.values()):
+            return self.message_text
+    
+        max_value = max(words_in_attempt.values())
+        keys_with_max_value = [key for key, value in words_in_attempt.items() if value == max_value]
+
         
-        
-        
-        return (list_of_keys[max(words_in_attempt, key=words_in_attempt.get)])
-            
+        #return (list_of_keys[max(words_in_attempt, key=words_in_attempt.get)])
+        return keys_with_max_value    
 
 if __name__ == '__main__':
 
@@ -230,7 +234,7 @@ if __name__ == '__main__':
     #print("Actual encryption:", message.apply_transpose(enc_dict))
     #enc_message = EncryptedSubMessage(message.apply_transpose(enc_dict))
     #print("Decrypted message:", enc_message.decrypt_message())
-    message = EncryptedSubMessage("HAlle Werld whit us yeor nima?")
+    message = EncryptedSubMessage("HAlle Werld ?")
     test = SubMessage('HEllo World what is your name?')
     print(test.apply_transpose(test.build_transpose_dict("iaueo")))
     print(message.decrypt_message())

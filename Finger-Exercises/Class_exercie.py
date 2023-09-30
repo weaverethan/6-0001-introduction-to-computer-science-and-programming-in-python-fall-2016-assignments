@@ -57,7 +57,7 @@ class Politician(Person):
 ethan = Politician('Ethan Weaver', "Republican")
 india = Politician('India Weaver', 'Democratic')
 ezra = Politician("Ezra Weaver")
-ethan.set_birthday(datetime.date(2000, 10, 30))
+ethan.set_birthday(datetime.date(1969, 6, 26))
 print(ethan.get_age())
 print(ethan.get_party())
 
