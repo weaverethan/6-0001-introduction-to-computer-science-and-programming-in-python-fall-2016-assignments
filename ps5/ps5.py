@@ -11,6 +11,7 @@ import threading
 from project_util import translate_html
 from mtTkinter import *
 from datetime import datetime
+from datetime import timedelta
 import pytz
 
 
@@ -101,7 +102,7 @@ class PhraseTrigger(Trigger):
         
         #clean string and phrase of puncuation and capital letters
         clean_phrase = ((re.sub(r'[^\w\s]', '', (''.join(self.phrase).lower())))).split()
-        clean_string = ((re.sub(r'[^\w\s]', ' ', (''.join(string.get_title()).lower())))).split()
+        clean_string = ((re.sub(r'[^\w\s]', ' ', (''.join(string).lower())))).split()
 
         #create a list of index's for when first word is in string
         indices = []
@@ -131,13 +132,18 @@ class TitleTrigger(PhraseTrigger):
     def __init__(self, phrase):
         super().__init__(phrase)
 
-    def evaluate(self, string):
-        return self.is_phrase_in(string)
-
-
+    def evaluate(self, news_story):
+        return self.is_phrase_in(news_story.get_title())
+    
 
 # Problem 4
-# TODO: DescriptionTrigger
+class DescriptionTrigger(PhraseTrigger):
+    def __init__(self, phrase):
+        super().__init__(phrase)
+
+    def evaluate(self, news_story):
+        return self.is_phrase_in(news_story.get_description())
+
 
 # TIME TRIGGERS
 
@@ -146,9 +152,45 @@ class TitleTrigger(PhraseTrigger):
 # Constructor:
 #        Input: Time has to be in EST and in the format of "%d %b %Y %H:%M:%S".
 #        Convert time from string to a datetime before saving it as an attribute.
+class TimeTrigger(Trigger):
+    def __init__(self, date_time_string):
+        self.dt = datetime.strptime(date_time_string, '%d %b %Y %H:%M:%S')
+        self.dt = self.dt.replace(tzinfo=pytz.timezone('America/Chicago'))
+
+
+
 
 # Problem 6
 # TODO: BeforeTrigger and AfterTrigger
+class BeforeTrigger(TimeTrigger):
+    def __init__(self, date_time_string):
+        super().__init__(date_time_string)
+    def evaluate(self, news_date):
+        naive_dt = datetime.now()
+        if naive_dt.tzinfo is None or naive_dt.tzinfo.utcoffset(naive_dt) is None:
+            news_data_temp = news_date.get_pubdate()
+            news_data_temp = news_data_temp.replace(tzinfo=pytz.timezone('America/Chicago'))
+        if news_data_temp < self.dt:
+            return True
+        else:
+            return False
+    
+
+class AfterTrigger(TimeTrigger):
+    def __init__(self, date_time_string):
+        super().__init__(date_time_string)
+    def evaluate(self, news_date):
+        naive_dt = datetime.now()
+        if naive_dt.tzinfo is None or naive_dt.tzinfo.utcoffset(naive_dt) is None:
+            news_data_temp = news_date.get_pubdate()
+            news_data_temp = news_data_temp.replace(tzinfo=pytz.timezone('America/Chicago'))
+        if news_data_temp > self.dt:
+            return True
+        else:
+            return False
+        
+
+
 
 
 # COMPOSITE TRIGGERS
