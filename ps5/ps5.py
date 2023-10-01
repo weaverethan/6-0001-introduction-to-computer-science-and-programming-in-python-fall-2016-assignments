@@ -191,37 +191,43 @@ class AfterTrigger(TimeTrigger):
         
 
 
-
-
 # COMPOSITE TRIGGERS
 
 # Problem 7
 class NotTrigger(Trigger):
     def __init__(self, trigger):
         self.trigger = trigger
-    def evaluate(self, trigger):
-        if trigger == True:
+    def evaluate(self, news_story):
+        if self.trigger.evaluate(news_story) == True:
             return False
         else:
             return True
         
 
-cuddly  = NewsStory('', 'The purple cow is soft and cuddly.', '', '', datetime.now())
-s2  = TitleTrigger('purple cow')
-print(s2.evaluate(cuddly))
-
-n = NotTrigger(True)
-b = NewsStory("guid", "title", "description", "link", datetime.now())
-print(n.evaluate(s2))
-y = NotTrigger(False)
-print(y.evaluate(s2))
-
 
 # Problem 8
-# TODO: AndTrigger
+class AndTrigger(Trigger):
+    def __init__(self, trigger1, trigger2):
+        self.trigger1 = trigger1
+        self.trigger2 = trigger2
+    def evaluate(self, news_story):
+        if self.trigger1.evaluate(news_story) and self.trigger2.evaluate(news_story) == True:
+            return True
+        else:
+            return False
+        
 
 # Problem 9
-# TODO: OrTrigger
+class OrTrigger(Trigger):
+    def __init__(self, trigger1, trigger2):
+        self.trigger1 = trigger1
+        self.trigger2 = trigger2
+    def evaluate(self, news_story):
+        if self.trigger1.evaluate(news_story) or self.trigger2.evaluate(news_story) == True:
+            return True
+        else:
+            return False
+        
 
 
 #======================
@@ -235,10 +241,16 @@ def filter_stories(stories, triggerlist):
 
     Returns: a list of only the stories for which a trigger in triggerlist fires.
     """
-    # TODO: Problem 10
-    # This is a placeholder
-    # (we're just returning all the stories, with no filtering)
-    return stories
+
+    relevant = []
+    for story in stories:
+        for trigger in triggerlist:
+            x = trigger
+            if x.evaluate(story) == True and story not in relevant:
+                relevant.append(story)
+    return relevant
+                
+
 
 
 
@@ -335,9 +347,9 @@ def main_thread(master):
         print(e)
 
 
-#if __name__ == '__main__':
-#    root = Tk()
-#    root.title("Some RSS parser")
-#    t = threading.Thread(target=main_thread, args=(root,))
-#    t.start()
-#    root.mainloop()
+if __name__ == '__main__':
+    root = Tk()
+    root.title("Some RSS parser")
+    t = threading.Thread(target=main_thread, args=(root,))
+    t.start()
+    root.mainloop()
