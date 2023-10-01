@@ -5,6 +5,7 @@
 
 import feedparser
 import string
+import re
 import time
 import threading
 from project_util import translate_html
@@ -76,7 +77,6 @@ class NewsStory(object):
     
 
 
-
 #======================
 # Triggers
 #======================
@@ -93,10 +93,47 @@ class Trigger(object):
 # PHRASE TRIGGERS
 
 # Problem 2
-# TODO: PhraseTrigger
+class PhraseTrigger(Trigger):
+    def __init__(self, phrase):
+        self.phrase = phrase
+
+    def is_phrase_in(self, string):
+        
+        #clean string and phrase of puncuation and capital letters
+        clean_phrase = ((re.sub(r'[^\w\s]', '', (''.join(self.phrase).lower())))).split()
+        clean_string = ((re.sub(r'[^\w\s]', ' ', (''.join(string.get_title()).lower())))).split()
+
+        #create a list of index's for when first word is in string
+        indices = []
+        for index in range(len(clean_string)):
+            if clean_string[index] == clean_phrase[0]:
+                indices.append(index)
+
+        if len(indices) == 0:
+            return False
+        
+        #Check to see if full phrase is in string
+        for i in indices:
+            word_match = 0
+            for index, word in enumerate(clean_phrase):
+                if 0 <= i + index < len(clean_string):
+                    if clean_string[i + index] == word:
+                        word_match += 1
+            if word_match == len(clean_phrase):
+                return True
+            else:
+                return False
+
 
 # Problem 3
-# TODO: TitleTrigger
+class TitleTrigger(PhraseTrigger):
+    def __init__(self, phrase):
+        super().__init__(phrase)
+
+    def evaluate(self, string):
+        return self.is_phrase_in(string)
+
+
 
 # Problem 4
 # TODO: DescriptionTrigger
@@ -236,10 +273,10 @@ def main_thread(master):
         print(e)
 
 
-if __name__ == '__main__':
-    root = Tk()
-    root.title("Some RSS parser")
-    t = threading.Thread(target=main_thread, args=(root,))
-    t.start()
-    root.mainloop()
+#if __name__ == '__main__':
+#    root = Tk()
+#    root.title("Some RSS parser")
+#    t = threading.Thread(target=main_thread, args=(root,))
+#    t.start()
+#    root.mainloop()
 
