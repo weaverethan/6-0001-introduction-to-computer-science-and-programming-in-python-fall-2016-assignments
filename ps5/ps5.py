@@ -196,7 +196,26 @@ class AfterTrigger(TimeTrigger):
 # COMPOSITE TRIGGERS
 
 # Problem 7
-# TODO: NotTrigger
+class NotTrigger(Trigger):
+    def __init__(self, trigger):
+        self.trigger = trigger
+    def evaluate(self, trigger):
+        if trigger == True:
+            return False
+        else:
+            return True
+        
+
+cuddly  = NewsStory('', 'The purple cow is soft and cuddly.', '', '', datetime.now())
+s2  = TitleTrigger('purple cow')
+print(s2.evaluate(cuddly))
+
+n = NotTrigger(True)
+b = NewsStory("guid", "title", "description", "link", datetime.now())
+print(n.evaluate(s2))
+y = NotTrigger(False)
+print(y.evaluate(s2))
+
 
 # Problem 8
 # TODO: AndTrigger
@@ -322,4 +341,3 @@ def main_thread(master):
 #    t = threading.Thread(target=main_thread, args=(root,))
 #    t.start()
 #    root.mainloop()
-
