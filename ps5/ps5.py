@@ -109,6 +109,7 @@ class PhraseTrigger(Trigger):
             if clean_string[index] == clean_phrase[0]:
                 indices.append(index)
 
+        #return false if no matchs where found
         if len(indices) == 0:
             return False
         
