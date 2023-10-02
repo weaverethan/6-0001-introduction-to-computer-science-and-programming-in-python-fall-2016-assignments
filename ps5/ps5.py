@@ -277,8 +277,31 @@ def read_trigger_config(filename):
     # TODO: Problem 11
     # line is the list of lines that you need to parse and for which you need
     # to build triggers
+    triggers = []
+    trigger_vars = {}
 
-    print(lines) # for now, print it so you see what it contains!
+    for line in lines:
+        line = line.split(',')
+        if line[0] == "ADD":
+            for variable in range(1,len(line)):
+                triggers.append(trigger_vars[line[variable]])
+        else:
+            if line[1] == "TITLE":
+                trigger_vars[line[0]] = TitleTrigger(line[2])
+            elif line[1] == "DESCRIPTION":
+                trigger_vars[line[0]] = DescriptionTrigger(line[2])
+            elif line[1] == "AFTER":
+                trigger_vars[line[0]] = AfterTrigger(line[2])
+            elif line[1] == "BEFORE":
+                trigger_vars[line[0]] = BeforeTrigger(line[2])
+            elif line[1] == "AND":
+                trigger_vars[line[0]] = AndTrigger(trigger_vars[line[2]],trigger_vars[line[3]])
+            elif line[1] == "OR":
+                trigger_vars[line[0]] = OrTrigger(trigger_vars[line[2]],trigger_vars[line[3]])
+            elif line[1] == "NOT":
+                trigger_vars[line[0]] = NotTrigger(trigger_vars[line[2]])
+            
+    return triggers
 
 
 
@@ -296,7 +319,7 @@ def main_thread(master):
 
         # Problem 11
         # TODO: After implementing read_trigger_config, uncomment this line 
-        # triggerlist = read_trigger_config('triggers.txt')
+        triggerlist = read_trigger_config('triggers.txt')
         
         # HELPER CODE - you don't need to understand this!
         # Draws the popup window that displays the filtered stories
