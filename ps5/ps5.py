@@ -13,6 +13,7 @@ from mtTkinter import *
 from datetime import datetime
 from datetime import timedelta
 import pytz
+from typing import Callable
 
 
 #-----------------------------------------------------------------------
