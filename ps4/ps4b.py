@@ -23,7 +23,7 @@ def load_words(file_name="words.txt"):
     # wordlist: list of strings
     wordlist = []
     for line in inFile:
-        wordlist.extend([word.lower() for word in line.split(' ')])
+        wordlist.extend([word.lower().strip('\n') for word in line.split(' ')])
     print("  ", len(wordlist), "words loaded.")
     return wordlist
 
@@ -44,7 +44,7 @@ def is_word(word_list, word):
     False
     '''
     word = word.lower()
-    word = word.strip(" !@#$%^&*()-_+={}[]|\:;'<>?,./\"")
+    word = word.strip(" !@#$%^&*()-_+={}[]|\:;'<>?,./\" ")
     return word in word_list
 
 def get_story_string():
@@ -224,7 +224,7 @@ class CiphertextMessage(Message):
         '''
         super().__init__(text)
         self.message_text = text
-        #self.valid_words = load_words("words.txt")
+
 
 
     def decrypt_message(self):
@@ -259,12 +259,13 @@ class CiphertextMessage(Message):
             for word in attempt:
                 if word in self.valid_words:
                     best_shift[attempt_shift] = best_shift.get(attempt_shift, 0) + 1
-
+    
         best_key = max(best_shift, key=best_shift.get)
 
         Message = attempts_dic[best_key]
 
         return (26-best_key, Message)
+    
             
 
 
@@ -284,8 +285,7 @@ if __name__ == '__main__':
 
     #TODO: best shift value and unencrypted story 
     
-    #test = PlaintextMessage("hello there momma how are you",8)
-    teast = CiphertextMessage("pmttw bpmzm uwuui")
-    teast = CiphertextMessage("Xoqy Tzcfsm wg o amhvwqoz qvofoqhsf qfsohsr cb hvs gdif ct o acasbh hc vszd qcjsf ob wbgittwqwsbhzm dzobbsr voqy. Vs vog pssb fsuwghsfsr tcf qzoggsg oh AWH hkwqs pstcfs, pih vog fsdcfhsrzm bsjsf doggsr o qzogg. Wh vog pssb hvs hforwhwcb ct hvs fsgwrsbhg ct Sogh Qoadig hc psqcas Xoqy Tzcfsm tcf o tsk bwuvhg soqv msof hc sriqohs wbqcawbu ghirsbhg wb hvs komg, asobg, obr shvwqg ct voqywbu.")
+    #test = PlaintextMessage("this is a test",8)
+    teast = CiphertextMessage("bpqa qa i bmab")
     #print(test.get_message_text_encrypted())
     print(teast.decrypt_message())
