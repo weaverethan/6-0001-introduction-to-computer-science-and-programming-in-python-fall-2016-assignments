@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "*.P-1": "gcode",
+        "*.P-2": "gcode",
+        "*.P-1-X": "gcode",
+        "*.P-2-X": "gcode",
+        "reverse.h": "c",
+        "iostream": "c"
+    }
+}

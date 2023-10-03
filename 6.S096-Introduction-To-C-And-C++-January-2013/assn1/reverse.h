@@ -1,5 +1,5 @@
-#ifndef _REVERSE_H
-#define _REVERSE_H
+#ifndef REVERSE_H
+#define REVERSE_H
 
 void reverse(char *str, int len);
 

@@ -17,7 +17,7 @@ int fib(int n) {
     }
 }
 
-int main() {
+/*int main() {
     // You may want to call the functions from here
     return 0;
-}
+}*/

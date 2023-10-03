@@ -1,7 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
+#include "reverse.h"
 
-void backwards(char *str, int len) {
+void reverse(char *str, int len) {
     // Allocate memory for reversed string
     char *reversed = malloc(len + 1);
 
@@ -36,11 +38,11 @@ void backwards(char *str, int len) {
     free(reversed);
 }
 
-int main() {
+/*int main() {
     // Example usage
     char input[] = "Hello World!";
     int length = sizeof(input) - 1; // Length excluding the null terminator
     backwards(input, length);
 
     return 0;
-}
+}*/
