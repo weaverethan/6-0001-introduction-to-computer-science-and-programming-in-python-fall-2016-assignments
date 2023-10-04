@@ -6,5 +6,6 @@
         "*.P-2-X": "gcode",
         "reverse.h": "c",
         "iostream": "c"
-    }
+    },
+    "C_Cpp.errorSquiggles": "enabled"
 }
