@@ -2,15 +2,15 @@
 
 int main()
 {
-	std::cout << 2 + 3 << '\n';
+	std::cout << "ENTER A NUMBER:";
 
-	int x{ 6 };
-	int y{ x - 2 };
-	std::cout << y << '\n';
+	int input{};
+	std::cin >> input;
 
-	int z{ };
-	z = x;
-	std::cout << z - x << '\n';
+	std::cout << "DOUBLE " << input <<" is: " << input *2  << '\n';
+	std::cout << "TRIPLE " << input <<" is: " << input *3  << '\n';
 
+	
+	
 	return 0;
 }
