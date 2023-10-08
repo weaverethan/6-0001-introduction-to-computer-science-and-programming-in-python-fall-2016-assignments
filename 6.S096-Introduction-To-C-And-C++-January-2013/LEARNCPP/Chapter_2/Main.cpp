@@ -1,11 +1,5 @@
 #include <iostream>
-
-
-int ReadNumber();
-
-void WriteAnswer(int num1, int num2);
-
-
+#include "main.h"
 
 int main(){
     WriteAnswer(ReadNumber(), ReadNumber());
