@@ -11,11 +11,11 @@ int main()
     [[maybe_unused]] constexpr std::uint8_t option_deleted{ 0x10 };
 
     std::uint8_t myArticleFlags{ option_favorited };
-
 	
     myArticleFlags |= option_viewed;
-    myArticleFlags |= option_deleted;
+    //myArticleFlags |= option_deleted;
     myArticleFlags &= ~option_favorited;
+    
     if (myArticleFlags & option_deleted){
 	    std::cout << "Option Deleted\n";
     } else {
