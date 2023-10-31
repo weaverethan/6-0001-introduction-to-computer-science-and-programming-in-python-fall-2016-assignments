@@ -40,7 +40,7 @@ int getUserGuess() {
             std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // Discard invalid input
         }
     }
-
+    ++guessNum;
     return userGuess;
 }
 
