@@ -1,12 +1,5 @@
 #include <iostream>
 
-
-
-
-
-
-
-
 class Point3d{
 
 
@@ -25,19 +18,6 @@ class Point3d{
 			std::cout << "<" << m_x << ", " << m_y << ", " << m_z << ">"; 
 		}
 };
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

@@ -3,8 +3,6 @@
 
 
 class Point3d{
-
-
 	private:
 		int m_x{};
 		int m_y{};
@@ -23,6 +21,7 @@ class Point3d{
 			return (m_x == other.m_x) && (m_y == other.m_y) && (m_z == other.m_z);
 		}
 };
+
 
 
 
